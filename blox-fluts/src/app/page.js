@@ -30,8 +30,8 @@ const getImageUrl = (name, category) => {
   
   const folder = folderMap[category] || category;
   
-  // Tenta carregar a imagem da pasta correspondente
-  return `/images/${folder}/${fileName}.png`;
+  // CORREÇÃO: usa .jpeg em vez de .png
+  return `/${folder}/${fileName}.jpeg`;
 };
 
 // Função que gera um SVG fallback (se a imagem não existir)
@@ -53,6 +53,13 @@ const generateFallbackSvg = (name, category) => {
   const letter = name.charAt(0).toUpperCase();
   
   return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23${color}' rx='8'/%3E%3Ctext x='60' y='72' text-anchor='middle' font-size='48' font-family='Arial' fill='%231a2332' font-weight='bold'%3E${encodeURIComponent(letter)}%3C/text%3E%3C/svg%3E`;
+};
+
+// Função para tentar carregar a imagem com fallback para .jpg
+const getImageUrlWithFallback = (name, category) => {
+  const baseUrl = getImageUrl(name, category);
+  // Tenta primeiro .jpeg, se falhar tenta .jpg
+  return baseUrl;
 };
 
 // Mapeamento de cores por categoria
