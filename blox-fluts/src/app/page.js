@@ -4,7 +4,7 @@ import Head from 'next/head';
 import styles from '../app/page.module.css';
 import { useState } from 'react';
 
-// Cores por categoria
+// Mapeamento de cores por categoria
 const categoryColors = {
   fruits: '#f7c948',
   swords: '#e74c3c',
@@ -16,20 +16,6 @@ const categoryColors = {
   bosses: '#e74c3c',
   raids: '#f39c12',
   materials: '#95a5a6'
-};
-
-// Cores para fallback em hex (sem #)
-const fallbackColors = {
-  fruits: 'f7c948',
-  swords: 'e74c3c',
-  guns: '2ecc71',
-  fightingStyles: '9b59b6',
-  accessories: '3498db',
-  races: 'e67e22',
-  dungeons: '1abc9c',
-  bosses: 'e74c3c',
-  raids: 'f39c12',
-  materials: '95a5a6'
 };
 
 // Dados completos de todos os guias
@@ -261,14 +247,118 @@ const categories = [
   { id: 'materials', label: '📦 Materiais' }
 ];
 
-// Componente de imagem SIMPLIFICADO - sempre mostra fallback
+// Componente de imagem que tenta várias extensões e nomes
 const ImageWithFallback = ({ name, category, className }) => {
-  // Gera o SVG fallback
-  const color = fallbackColors[category] || '6b7488';
-  const letter = name.charAt(0).toUpperCase();
-  const svgUrl = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23${color}' rx='8'/%3E%3Ctext x='60' y='72' text-anchor='middle' font-size='48' font-family='Arial' fill='%231a2332' font-weight='bold'%3E${encodeURIComponent(letter)}%3C/text%3E%3C/svg%3E`;
+  const [attemptIndex, setAttemptIndex] = useState(0);
+  const [hasError, setHasError] = useState(false);
   
-  return <img src={svgUrl} alt={name} className={className} />;
+  // Lista de tentativas: diferentes nomes e extensões
+  const getAttempts = (name, category) => {
+    const folderMap = {
+      fruits: 'fruits',
+      swords: 'swords',
+      guns: 'guns',
+      fightingStyles: 'fightingStyles',
+      accessories: 'accessories',
+      races: 'races',
+      dungeons: 'bosses',
+      bosses: 'bosses',
+      raids: 'raids',
+      materials: 'materials'
+    };
+    
+    const folder = folderMap[category] || category;
+    const baseName = name
+      .toLowerCase()
+      .replace(/[\(\)]/g, '')
+      .replace(/\s/g, '_')
+      .replace(/[^a-z0-9_\-]/g, '')
+      .replace(/_+/g, '_')
+      .replace(/-/g, '_');
+    
+    // Nomes alternativos para casos especiais
+    const altNames = {
+      't-rex': 'trex',
+      'pole (1ª forma)': 'pole',
+      'pole (2ª forma)': 'pole_v2',
+      "warden's sword": 'wardens_sword'
+    };
+    
+    const altName = altNames[baseName] || baseName;
+    
+    // Tentativas: diferentes combinações
+    const attempts = [];
+    const extensions = ['.jpeg', '.jpg', '.png', '.gif', '.webp', ''];
+    
+    // Tenta com o nome normal
+    for (const ext of extensions) {
+      attempts.push(`/${folder}/${baseName}${ext}`);
+    }
+    
+    // Tenta com o nome alternativo
+    if (altName !== baseName) {
+      for (const ext of extensions) {
+        attempts.push(`/${folder}/${altName}${ext}`);
+      }
+    }
+    
+    // Tenta com a primeira letra maiúscula
+    const capitalized = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+    if (capitalized !== baseName) {
+      for (const ext of extensions) {
+        attempts.push(`/${folder}/${capitalized}${ext}`);
+      }
+    }
+    
+    return attempts;
+  };
+
+  const attempts = getAttempts(name, category);
+  const currentUrl = attempts[attemptIndex] || attempts[0];
+
+  const handleError = () => {
+    if (attemptIndex < attempts.length - 1) {
+      setAttemptIndex(attemptIndex + 1);
+    } else {
+      setHasError(true);
+    }
+  };
+
+  if (hasError) {
+    // Mostra o fallback SVG
+    const colors = {
+      fruits: 'f7c948',
+      swords: 'e74c3c',
+      guns: '2ecc71',
+      fightingStyles: '9b59b6',
+      accessories: '3498db',
+      races: 'e67e22',
+      dungeons: '1abc9c',
+      bosses: 'e74c3c',
+      raids: 'f39c12',
+      materials: '95a5a6'
+    };
+    const color = colors[category] || '6b7488';
+    const letter = name.charAt(0).toUpperCase();
+    const svgUrl = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23${color}' rx='8'/%3E%3Ctext x='60' y='72' text-anchor='middle' font-size='48' font-family='Arial' fill='%231a2332' font-weight='bold'%3E${encodeURIComponent(letter)}%3C/text%3E%3C/svg%3E`;
+    
+    return (
+      <img 
+        src={svgUrl}
+        alt={name}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <img
+      src={currentUrl}
+      alt={name}
+      className={className}
+      onError={handleError}
+    />
+  );
 };
 
 export default function Home() {
