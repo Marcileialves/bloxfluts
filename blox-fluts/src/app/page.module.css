@@ -1,0 +1,340 @@
+/* styles/Home.module.css */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background: #0b0e14;
+  min-height: 100vh;
+  color: #e8edf5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #2a313c;
+  padding-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #f7c948, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.searchWrapper {
+  background: #1e2430;
+  border: 1px solid #2f3745;
+  border-radius: 40px;
+  padding: 0.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 250px;
+  position: relative;
+}
+
+.searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e8edf5;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.searchInput::placeholder {
+  color: #6b7488;
+}
+
+.searchIcon {
+  fill: #6b7488;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.clearButton {
+  background: transparent;
+  border: none;
+  color: #6b7488;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0 4px;
+}
+
+.clearButton:hover {
+  color: #e8edf5;
+}
+
+/* Navegação */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #1a2332;
+}
+
+.navButton {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 30px;
+  padding: 0.5rem 1.2rem;
+  color: #8a9bb5;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.navButton:hover {
+  background: #1a2332;
+  color: #e8edf5;
+}
+
+.navButtonActive {
+  background: #1a2332;
+  color: #f7c948;
+  border-color: #f7c948;
+}
+
+.navIcon {
+  font-size: 1.1rem;
+}
+
+.navLabel {
+  font-size: 0.85rem;
+}
+
+/* Conteúdo */
+.content {
+  margin-top: 0.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-bottom: 3px solid #f7c948;
+  padding-bottom: 0.3rem;
+  display: inline-block;
+  margin: 0;
+}
+
+.itemCount {
+  color: #6b7488;
+  font-size: 0.9rem;
+}
+
+/* Grid de cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card do item */
+.itemCard {
+  background: #151c26;
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 1px solid #232b38;
+  transition: all 0.2s;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.itemCard:hover {
+  border-color: #f7c948;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Raridades */
+.rarityCommon { border-left: 4px solid #6b7488; }
+.rarityUncommon { border-left: 4px solid #2ecc71; }
+.rarityRare { border-left: 4px solid #3498db; }
+.rarityLegendary { border-left: 4px solid #f39c12; }
+.rarityMythical { border-left: 4px solid #e74c3c; }
+
+.itemImageWrapper {
+  flex-shrink: 0;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.itemImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #1a2332;
+  border: 1px solid #2a313c;
+}
+
+.rarityBadge {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  background: #1a2332;
+  border: 1px solid #2a313c;
+  white-space: nowrap;
+  color: #b0c4de;
+}
+
+.itemDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemRow {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.1rem 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.itemLabel {
+  color: #6b7488;
+  font-weight: 500;
+  text-transform: capitalize;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.itemValue {
+  color: #e8edf5;
+  word-break: break-word;
+}
+
+/* Caixa de mecânicas */
+.mechanicsBox {
+  margin-top: 2rem;
+  padding: 1.2rem 1.5rem;
+  background: #1a2332;
+  border-radius: 12px;
+  border-left: 4px solid #f7c948;
+}
+
+.mechanicsBox strong {
+  color: #f7c948;
+}
+
+/* Mensagem vazia */
+.emptyMessage {
+  text-align: center;
+  color: #6b7488;
+  padding: 3rem 0;
+  font-size: 1.1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .searchWrapper {
+    min-width: 100%;
+  }
+
+  .nav {
+    gap: 0.3rem;
+  }
+
+  .navButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .navLabel {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .itemCard {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .itemImageWrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .itemImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  .itemRow {
+    justify-content: center;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .navButton {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .navIcon {
+    font-size: 0.9rem;
+  }
+}
