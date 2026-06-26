@@ -22,6 +22,7 @@ const categoryColors = {
 const allData = {
   fruits: {
     title: '🍎 Blox Fruits',
+    hasImages: true, // Frutas têm imagens
     items: [
       { name: 'Rocket', type: 'Natural', price: '5,000 Beli', rarity: 'Comum' },
       { name: 'Spin', type: 'Natural', price: '7,500 Beli', rarity: 'Comum' },
@@ -68,6 +69,7 @@ const allData = {
   },
   swords: {
     title: '⚔️ Espadas',
+    hasImages: true, // Espadas têm imagens
     items: [
       { name: 'Cutlass', location: 'Ilha Inicial', cost: '1,000 Beli', rarity: 'Comum' },
       { name: 'Katana', location: 'Ilha Inicial', cost: '1,000 Beli', rarity: 'Comum' },
@@ -109,6 +111,7 @@ const allData = {
   },
   guns: {
     title: '🔫 Armas de Fogo',
+    hasImages: false, // Sem imagens
     items: [
       { name: 'Slingshot', location: 'Cidade do Meio', cost: '5,000 Beli', rarity: 'Comum' },
       { name: 'Flintlock', location: 'Cidade do Meio', cost: '10,500 Beli', rarity: 'Incomum' },
@@ -128,6 +131,7 @@ const allData = {
   },
   fightingStyles: {
     title: '🥋 Estilos de Luta',
+    hasImages: false,
     items: [
       { name: 'Combat', location: 'Inicial', cost: 'Grátis', requirement: 'Nenhum' },
       { name: 'Dark Step', location: 'Vila Pirata', cost: '150,000 Beli', requirement: 'Nenhum' },
@@ -145,6 +149,7 @@ const allData = {
   },
   accessories: {
     title: '💍 Acessórios',
+    hasImages: false,
     items: [
       { name: 'Black Cape', location: 'Fortaleza Marinha', cost: '50,000 Beli', bonus: '+100 Energia, +100 Vida, +5% dano' },
       { name: 'Swordsman Hat', location: 'Deserto', cost: '150,000 Beli', bonus: '+10% dano de Espada' },
@@ -171,6 +176,7 @@ const allData = {
   },
   races: {
     title: '🧬 Raças',
+    hasImages: false,
     items: [
       { name: 'Humano', bonus: 'Dano e mobilidade', v2: 'Flower Quest + 500,000 Beli', v3: 'Matar Diamond, Jeremy, Fajita', v4: 'Trial of Strength' },
       { name: 'Anjo', bonus: 'Regeneração e pulo', v2: 'Flower Quest + 500,000 Beli', v3: 'Matar jogador Anjo', v4: 'Trial of the King' },
@@ -183,6 +189,7 @@ const allData = {
   },
   dungeons: {
     title: '🏰 Masmorras (Dungeons)',
+    hasImages: false,
     items: [
       { name: 'Ancient Beast', floor: 'Andar 5', fruit: 'T-Rex', hp: '285,000', strategy: 'Duas formas, mantenha distância' },
       { name: 'Kitsune Lord', floor: 'Andar 10', fruit: 'Kitsune', hp: 'Desconhecido', strategy: 'Destrua 4 Santuários duas vezes' },
@@ -193,6 +200,7 @@ const allData = {
   },
   bosses: {
     title: '👹 Chefes Especiais',
+    hasImages: false,
     items: [
       { name: 'rip_indra', location: 'Castelo no Mar', level: '5000', summon: '3 Auras Lendárias + God\'s Chalice', rewards: 'Valkyrie Helmet, Dark Dagger, 1,500 Fragmentos' },
       { name: 'Dough King', location: 'Cake Land', level: '2300', summon: '10 Conjured Cocoa + God\'s Chalice + 500 mortes', rewards: 'Mirror Fractal, Spikey Trident, 2,000 Fragmentos' },
@@ -202,6 +210,7 @@ const allData = {
   },
   raids: {
     title: '⚡ Raids',
+    hasImages: false,
     items: [
       { name: 'Flame', cost: '14,500 Fragmentos', moves: 'Z:500, X:3.000, C:4.000, V:5.000, F:2.000' },
       { name: 'Ice', cost: '14,500 Fragmentos', moves: 'Z:500, X:3.000, C:4.000, V:5.000, F:2.000' },
@@ -219,6 +228,7 @@ const allData = {
   },
   materials: {
     title: '📦 Materiais',
+    hasImages: false,
     items: [
       { name: 'Bones', source: 'Castelo Assombrado, Soul Reaper', max: '5,000', uses: 'Death King, Skull Guitar' },
       { name: 'Ectoplasm', source: 'Navio Amaldiçoado, Cursed Captain', max: '1,000', uses: 'Ghoul, Skull Guitar, Midnight Blade' },
@@ -252,19 +262,40 @@ const ImageWithFallback = ({ name, category, className }) => {
   const [attemptIndex, setAttemptIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
   
-  // Lista de tentativas: diferentes nomes e extensões
+  // Verifica se a categoria deve ter imagens
+  const categoryData = allData[category];
+  if (!categoryData || !categoryData.hasImages) {
+    // Se não tem imagens, mostra o fallback SVG sem tentar carregar imagens
+    const colors = {
+      fruits: 'f7c948',
+      swords: 'e74c3c',
+      guns: '2ecc71',
+      fightingStyles: '9b59b6',
+      accessories: '3498db',
+      races: 'e67e22',
+      dungeons: '1abc9c',
+      bosses: 'e74c3c',
+      raids: 'f39c12',
+      materials: '95a5a6'
+    };
+    const color = colors[category] || '6b7488';
+    const letter = name.charAt(0).toUpperCase();
+    const svgUrl = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23${color}' rx='8'/%3E%3Ctext x='60' y='72' text-anchor='middle' font-size='48' font-family='Arial' fill='%231a2332' font-weight='bold'%3E${encodeURIComponent(letter)}%3C/text%3E%3C/svg%3E`;
+    
+    return (
+      <img 
+        src={svgUrl}
+        alt={name}
+        className={className}
+      />
+    );
+  }
+  
+  // Lista de tentativas para categorias com imagens (fruits e swords)
   const getAttempts = (name, category) => {
     const folderMap = {
       fruits: 'fruits',
       swords: 'swords',
-      guns: 'guns',
-      fightingStyles: 'fightingStyles',
-      accessories: 'accessories',
-      races: 'races',
-      dungeons: 'bosses',
-      bosses: 'bosses',
-      raids: 'raids',
-      materials: 'materials'
     };
     
     const folder = folderMap[category] || category;
@@ -281,7 +312,25 @@ const ImageWithFallback = ({ name, category, className }) => {
       't-rex': 'trex',
       'pole (1ª forma)': 'pole',
       'pole (2ª forma)': 'pole_v2',
-      "warden's sword": 'wardens_sword'
+      "warden's sword": 'wardens_sword',
+      'twin hooks': 'twin_hooks',
+      'shark saw': 'shark_saw',
+      'soul cane': 'soul_cane',
+      'gravity cane': 'gravity_cane',
+      'dragon trident': 'dragon_trident',
+      'dual-headed blade': 'dual_head_blade',
+      'spikey trident': 'spikey_trident',
+      'buddy sword': 'buddy_sword',
+      'dark dagger': 'dark_dagger',
+      'true triple katana': 'true_triple_katana',
+      'cursed dual katana': 'cursed_dual_katana',
+      'hallow scythe': 'hallow_scythe',
+      'dark blade': 'dark_blade',
+      'fox lamp': 'fox_lamp',
+      'shark anchor': 'shark_anchor',
+      'iron mace': 'iron_mace',
+      'triple katana': 'triple_katana',
+      'dual katana': 'dual_katana'
     };
     
     const altName = altNames[baseName] || baseName;
